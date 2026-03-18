@@ -11,7 +11,7 @@ export async function checkDbHealth(db: D1Database) {
     await d1.select().from(steps).limit(1);
 
     return {
-      status: 'healthy',
+      status: 'healthy' as const,
       details: {
         projects: 'accessible',
         epics: 'accessible',
@@ -19,10 +19,11 @@ export async function checkDbHealth(db: D1Database) {
         steps: 'accessible',
       },
     };
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown DB health check error';
     return {
-      status: 'unhealthy',
-      error: error.message,
+      status: 'unhealthy' as const,
+      error: message,
     };
   }
 }

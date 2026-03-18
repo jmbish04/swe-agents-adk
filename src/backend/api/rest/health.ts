@@ -28,8 +28,9 @@ route.openapi(healthCheckRoute, async (c) => {
   try {
     const healthReport = await checkHealth(c.env);
     return c.json(healthReport, 200);
-  } catch (e: any) {
-    return c.json({ error: e.message }, 500);
+  } catch (e) {
+    const errorMessage = e instanceof Error ? e.message : "An unknown error occurred.";
+    return c.json({ error: errorMessage }, 500);
   }
 });
 

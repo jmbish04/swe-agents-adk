@@ -1,19 +1,26 @@
 import { checkDbHealth } from './db';
 
-export async function checkHealth(env: any) {
-  let dbHealth: any = { status: 'unhealthy', error: 'DB binding not available' };
+interface ServiceHealth {
+  status: 'healthy' | 'unhealthy';
+  details?: unknown;
+  error?: string;
+}
+
+export async function checkHealth(env: Env) {
+  let dbHealth: ServiceHealth = { status: 'unhealthy', error: 'DB binding not available' };
   try {
-    if (env && env.DB) {
+    if (env.DB) {
       dbHealth = await checkDbHealth(env.DB);
     }
-  } catch (e: any) {
-    dbHealth = { status: 'unhealthy', error: e.message };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : 'Unknown DB health check error';
+    dbHealth = { status: 'unhealthy', error: message };
   }
 
   // Check AI Gateway
-  let aiHealth: any = { status: 'unhealthy', details: 'not tested' };
+  let aiHealth: ServiceHealth = { status: 'unhealthy', details: 'not tested' };
   try {
-    if (env && env.AI && typeof env.AI.run === 'function') {
+    if (env.AI && typeof env.AI.run === 'function') {
       const aiResponse = await env.AI.run('@cf/meta/llama-3.3-70b-instruct-fp8-fast', {
         messages: [{ role: 'user', content: 'Say healthy' }],
         max_tokens: 10,
@@ -22,20 +29,23 @@ export async function checkHealth(env: any) {
     } else {
       aiHealth = { status: 'unhealthy', error: 'AI binding not available or misconfigured' };
     }
-  } catch (error: any) {
-    aiHealth = { status: 'unhealthy', error: error.message };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown AI health check error';
+    aiHealth = { status: 'unhealthy', error: message };
   }
 
   // Check Agent Durable Objects (Stubs only for now)
   const agentNames = [
     'PM_AGENT', 'UX_AGENT', 'PYTHON_AGENT', 'APPS_AGENT',
     'WORKSPACE_AGENT', 'CF_AGENT', 'GITHUB_AGENT', 'SPECIALTY_AGENT'
-  ];
+  ] as const;
 
   const agentHealths = agentNames.map(name => ({
-    name: name,
-    status: (env && env[name]) ? 'healthy' : 'unhealthy',
+    name,
+    status: env[name] ? 'healthy' : 'unhealthy',
   }));
+
+  const allAgentsHealthy = agentHealths.every(agent => agent.status === 'healthy');
 
   return {
     timestamp: new Date().toISOString(),
@@ -44,6 +54,6 @@ export async function checkHealth(env: any) {
       ai: aiHealth,
       agents: agentHealths,
     },
-    overallStatus: (dbHealth.status === 'healthy' && aiHealth.status === 'healthy') ? 'healthy' : 'degraded',
+    overallStatus: (dbHealth.status === 'healthy' && aiHealth.status === 'healthy' && allAgentsHealthy) ? 'healthy' : 'degraded',
   };
 }
