@@ -1,4 +1,4 @@
-import { AIChatAgent } from "@cloudflare/ai-chat";
+import { AIChatAgent } from "agents/ai-chat-agent";
 
 export class ProductManagerAgent extends AIChatAgent<Env> {
   async onChatMessage(message: string) {
