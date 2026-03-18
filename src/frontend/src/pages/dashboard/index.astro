@@ -1,0 +1,51 @@
+---
+/**
+ * /dashboard — Global project monitoring dashboard
+ *
+ * Uses AppLayout with top-level app nav. Shows ongoing projects,
+ * cross-application progress metrics, and recent activity.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { appNav } from "@/components/SidebarNav";
+---
+
+<AppLayout
+  title="Dashboard — MindHive"
+  description="Monitor ongoing projects and progress across all applications."
+  navSections={appNav}
+>
+  <span slot="topbar" class="text-sm font-medium">Dashboard</span>
+
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Dashboard</h1>
+      <p class="text-sm text-muted-foreground">
+        Monitor ongoing projects and progress across all applications.
+      </p>
+    </div>
+
+    <!-- Stats row -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        [
+          { label: "Applications", value: "—" },
+          { label: "Active Projects", value: "—" },
+          { label: "Open Tasks", value: "—" },
+          { label: "Agent Sessions", value: "—" },
+        ].map((stat) => (
+          <div class="rounded-xl border border-border/60 bg-card p-5 shadow-xs">
+            <p class="text-xs text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+            <p class="mt-1 text-2xl font-bold tabular-nums">{stat.value}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Recent activity placeholder -->
+    <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+      <h2 class="mb-4 text-base font-semibold">Recent Activity</h2>
+      <!-- TODO: Hydrate with real activity feed from API -->
+      <p class="text-sm text-muted-foreground">No recent activity yet.</p>
+    </div>
+  </div>
+</AppLayout>

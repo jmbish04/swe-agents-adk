@@ -1,0 +1,56 @@
+---
+/**
+ * /project-viewport/[id]/insights — Jules SDK code review suggestions
+ *
+ * Displays AI-generated insights from Jules SDK reviewing the project's
+ * codebase. Each insight card shows severity, category, and recommendation.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { projectViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = projectViewportNav(id!);
+---
+
+<AppLayout
+  title="Insights — MindHive"
+  description="AI code-review suggestions for this project."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Project {id}</span>
+      <span>/</span>
+      <span class="text-foreground font-medium">Insights</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Insights</h1>
+        <p class="text-sm text-muted-foreground">
+          AI suggestions from Jules SDK reviewing your codebase.
+        </p>
+      </div>
+      <!-- TODO: Trigger a Jules SDK re-analysis run -->
+      <button
+        id="refresh-insights-btn"
+        class="inline-flex h-9 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
+      >
+        Refresh
+      </button>
+    </div>
+
+    <!--
+      TODO: Render insight cards from API.
+      Each card: severity badge (critical/warning/info), category, file path, recommendation text,
+      and a "Create Task" action that adds to the backlog.
+    -->
+    <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+      <p class="text-sm text-muted-foreground">No insights yet. Trigger an analysis to begin.</p>
+    </div>
+  </div>
+</AppLayout>

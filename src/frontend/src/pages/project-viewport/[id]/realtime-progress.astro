@@ -1,0 +1,69 @@
+---
+/**
+ * /project-viewport/[id]/realtime-progress — Live agent execution feed
+ *
+ * Streams real-time progress from agent workers over WebSocket.
+ * User can monitor task/phase completion and pause execution to steer agents.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { projectViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = projectViewportNav(id!);
+---
+
+<AppLayout
+  title="Realtime Progress — MindHive"
+  description="Live agent execution feed for this project."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Project {id}</span>
+      <span>/</span>
+      <span class="text-foreground font-medium">Realtime Progress</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Realtime Progress</h1>
+        <p class="text-sm text-muted-foreground">
+          Live feed of agent activity across tasks, stories, and phases.
+        </p>
+      </div>
+      <!-- TODO: Implement pause/resume via agent RPC -->
+      <button
+        id="pause-agents-btn"
+        class="inline-flex h-9 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
+      >
+        ⏸ Pause Agents
+      </button>
+    </div>
+
+    <!--
+      TODO: Connect to WebSocket endpoint for this project.
+      Render a scrollable log of agent events:
+      - Phase / Epic / Story / Task label
+      - Agent name + action (thinking / coding / reviewing / done)
+      - Timestamp
+      - Expandable diff/output
+    -->
+    <div
+      id="progress-feed"
+      class="h-96 overflow-y-auto rounded-xl border border-border/60 bg-card p-4 font-mono text-xs shadow-xs"
+    >
+      <p class="text-muted-foreground">Waiting for agent events…</p>
+    </div>
+
+    <!-- Phase / Story progress bars -->
+    <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+      <h2 class="mb-4 text-base font-semibold">Phase Progress</h2>
+      <!-- TODO: Render per-phase completion bars from API -->
+      <p class="text-sm text-muted-foreground">No active phases.</p>
+    </div>
+  </div>
+</AppLayout>

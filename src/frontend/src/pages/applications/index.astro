@@ -1,0 +1,53 @@
+---
+/**
+ * /applications — List all applications
+ *
+ * Shows existing applications as cards with links to their viewport.
+ * Includes a "Create Application" button that opens a modal intake.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { appNav } from "@/components/SidebarNav";
+---
+
+<AppLayout
+  title="Applications — MindHive"
+  description="Manage your applications."
+  navSections={appNav}
+>
+  <span slot="topbar" class="text-sm font-medium">Applications</span>
+
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Applications</h1>
+        <p class="text-sm text-muted-foreground">All applications you have access to.</p>
+      </div>
+      <!-- TODO: Wire this button to open the CreateApplicationModal -->
+      <button
+        id="create-application-btn"
+        class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        + New Application
+      </button>
+    </div>
+
+    <!-- Applications grid -->
+    <!--
+      TODO: Fetch applications list from API and map over them.
+      Each card should link to /application-viewport/[id]/landing
+    -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="rounded-xl border border-dashed border-border/60 bg-card p-6 shadow-xs">
+        <p class="text-sm text-muted-foreground">No applications yet. Create one to get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    TODO: CreateApplicationModal — intake fields:
+    - Application name
+    - Description
+    - GitHub repo URL
+    - Primary language / stack
+  -->
+</AppLayout>

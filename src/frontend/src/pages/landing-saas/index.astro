@@ -1,0 +1,62 @@
+---
+/**
+ * /landing-saas — Public marketing landing page
+ *
+ * Uses BaseLayout (public, no sidebar). A deeper coding pass should
+ * expand with hero, features, pricing, and CTA sections.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="MindHive — AI-powered project intelligence"
+  description="MindHive orchestrates AI agents to manage your software projects from planning to delivery."
+>
+  <!-- Hero -->
+  <section class="flex flex-col items-center justify-center gap-6 px-4 py-24 text-center">
+    <h1 class="text-4xl font-bold tracking-tight sm:text-6xl">
+      Project intelligence, <br />
+      <span class="text-muted-foreground">powered by agents</span>
+    </h1>
+    <p class="max-w-xl text-lg text-muted-foreground">
+      MindHive orchestrates specialised AI agents across your whole SDLC — planning, coding,
+      reviewing, and deploying — while you stay in control.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/auth"
+        class="inline-flex h-10 items-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        Get started free
+      </a>
+      <a
+        href="#features"
+        class="inline-flex h-10 items-center rounded-md border border-border px-5 text-sm font-medium transition-colors hover:bg-muted"
+      >
+        Learn more
+      </a>
+    </div>
+  </section>
+
+  <!-- Features placeholder -->
+  <section id="features" class="border-t border-border/60 px-4 py-20">
+    <div class="mx-auto max-w-4xl space-y-12">
+      <h2 class="text-center text-3xl font-bold tracking-tight">Features</h2>
+      <!-- TODO: Expand feature cards in a deeper coding pass -->
+      <div class="grid gap-6 sm:grid-cols-3">
+        {
+          [
+            { title: "AI Agents", body: "Specialised agents for every team role." },
+            { title: "Realtime Progress", body: "Live WebSocket updates across phases." },
+            { title: "Project Intelligence", body: "Insights from Jules SDK code review." },
+          ].map((f) => (
+            <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+              <h3 class="mb-2 font-semibold">{f.title}</h3>
+              <p class="text-sm text-muted-foreground">{f.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

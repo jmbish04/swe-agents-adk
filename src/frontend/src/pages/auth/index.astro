@@ -1,0 +1,34 @@
+---
+/**
+ * /auth — Authentication page (sign-in / sign-up)
+ *
+ * Uses BaseLayout (no sidebar). A deeper coding pass should wire up
+ * the actual auth provider (e.g. Cloudflare Access, JWT, etc.)
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Sign In — MindHive" description="Sign in to your MindHive account">
+  <div class="flex min-h-[calc(100svh-var(--header-height))] items-center justify-center p-4">
+    <div class="w-full max-w-sm space-y-6">
+      <div class="space-y-2 text-center">
+        <h1 class="text-2xl font-bold tracking-tight">Welcome back</h1>
+        <p class="text-sm text-muted-foreground">Sign in to your MindHive account</p>
+      </div>
+
+      <!-- TODO: Replace with your auth provider form (Cloudflare Access / magic link / OAuth) -->
+      <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+        <p class="text-center text-xs text-muted-foreground">
+          Auth form placeholder — wire up your provider here.
+        </p>
+      </div>
+
+      <p class="text-center text-xs text-muted-foreground">
+        Don't have an account?{" "}
+        <a href="/auth/register" class="underline underline-offset-4 hover:text-foreground">
+          Sign up
+        </a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>

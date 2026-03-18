@@ -1,0 +1,61 @@
+---
+/**
+ * /project-viewport/[id]/kanban — Kanban board
+ *
+ * Columnar task board: To Do → In Progress → In Review → Done.
+ * Cards are draggable; agents update status via API.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { projectViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = projectViewportNav(id!);
+
+const columns = ["To Do", "In Progress", "In Review", "Done"];
+---
+
+<AppLayout
+  title="Kanban — MindHive"
+  description="Kanban board for this project."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Project {id}</span>
+      <span>/</span>
+      <span class="text-foreground font-medium">Kanban</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Kanban</h1>
+      <p class="text-sm text-muted-foreground">Drag tasks across columns or let agents update status.</p>
+    </div>
+
+    <!-- Board columns -->
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {
+        columns.map((col) => (
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {col}
+              </span>
+              <span class="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs tabular-nums">0</span>
+            </div>
+            <div
+              class="min-h-32 rounded-xl border border-dashed border-border/60 bg-card p-3 shadow-xs"
+              data-column={col}
+            >
+              {/* TODO: Render draggable task cards from API */}
+              <p class="text-xs text-muted-foreground">Empty</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</AppLayout>

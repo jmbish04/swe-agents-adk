@@ -1,0 +1,42 @@
+{
+  "name": "mindhive",
+  "main": "index.ts",
+  "compatibility_date": "2026-03-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "../frontend/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mindhive-db",
+      "database_id": "REPLACE_ME",
+      "migrations_dir": "./drizzle"
+    }
+  ],
+  "ai": { "binding": "AI" },
+  "durable_objects": {
+    "bindings": [
+      { "name": "PM_AGENT", "class_name": "ProductManagerAgent" },
+      { "name": "UX_AGENT", "class_name": "UxTeamAgent" },
+      { "name": "PYTHON_AGENT", "class_name": "PythonTeamAgent" },
+      { "name": "APPS_AGENT", "class_name": "AppsScriptTeamAgent" },
+      { "name": "WORKSPACE_AGENT", "class_name": "WorkspaceTeamAgent" },
+      { "name": "CF_AGENT", "class_name": "CloudflareTeamAgent" },
+      { "name": "GITHUB_AGENT", "class_name": "GithubTeamAgent" },
+      { "name": "SPECIALTY_AGENT", "class_name": "SpecialtyTeamAgent" }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "ProductManagerAgent", "UxTeamAgent", "PythonTeamAgent", 
+        "AppsScriptTeamAgent", "WorkspaceTeamAgent", "CloudflareTeamAgent",
+        "GithubTeamAgent", "SpecialtyTeamAgent"
+      ]
+    }
+  ]
+}

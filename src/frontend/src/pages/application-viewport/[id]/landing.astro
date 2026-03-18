@@ -1,0 +1,57 @@
+---
+/**
+ * /application-viewport/[id]/landing — Application overview dashboard
+ *
+ * Dynamic route — [id] maps to the application ID.
+ * Shows progress, linked projects count, recent agent activity for this app.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { applicationViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = applicationViewportNav(id!);
+---
+
+<AppLayout
+  title="Application Overview — MindHive"
+  description="Overview of your application's ongoing progress."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">{id}</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Application Overview</h1>
+      <p class="text-sm text-muted-foreground">ID: <code>{id}</code></p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid gap-4 sm:grid-cols-3">
+      {
+        [
+          { label: "Projects", value: "—" },
+          { label: "Active Agents", value: "—" },
+          { label: "Open Tasks", value: "—" },
+        ].map((stat) => (
+          <div class="rounded-xl border border-border/60 bg-card p-5 shadow-xs">
+            <p class="text-xs text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+            <p class="mt-1 text-2xl font-bold tabular-nums">{stat.value}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Recent activity -->
+    <div class="rounded-xl border border-border/60 bg-card p-6 shadow-xs">
+      <h2 class="mb-4 text-base font-semibold">Recent Activity</h2>
+      <!-- TODO: Pull from API using application ID -->
+      <p class="text-sm text-muted-foreground">No activity yet.</p>
+    </div>
+  </div>
+</AppLayout>

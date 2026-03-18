@@ -1,0 +1,96 @@
+---
+/**
+ * /project-viewport/[id]/chatroom/phase — Phase / Epic / Story / Task chat
+ *
+ * A pub/sub WebSocket room opened for each phase, epic, user story, or task.
+ * Agents collaborate here in realtime; the user monitors the stream and can
+ * pause progress or inject steering messages.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { projectViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = projectViewportNav(id!);
+---
+
+<AppLayout
+  title="Chat by Phase — MindHive"
+  description="Monitor agent collaboration by phase, epic, user story, or task."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Project {id}</span>
+      <span>/</span>
+      <span class="text-foreground font-medium">Chatroom › By Phase</span>
+    </nav>
+  </span>
+
+  <div class="flex h-[calc(100svh-8rem)] gap-4 overflow-hidden">
+    <!-- Phase / Epic / Story tree selector -->
+    <aside class="w-56 shrink-0 overflow-y-auto rounded-xl border border-border/60 bg-card shadow-xs">
+      <div class="p-3">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Hierarchy
+        </p>
+        <!--
+          TODO: Render project phase → epic → story → task tree from API.
+          Clicking a node subscribes the chat view to that node's WebSocket room.
+        -->
+        <p class="text-xs text-muted-foreground">No phases yet.</p>
+      </div>
+    </aside>
+
+    <!-- Collaboration stream -->
+    <div class="flex flex-1 flex-col overflow-hidden rounded-xl border border-border/60 bg-card shadow-xs">
+      <div class="flex items-center justify-between border-b border-border/60 px-4 py-3">
+        <p class="text-sm font-medium">Select a phase, epic, story, or task to monitor</p>
+        <div class="flex items-center gap-2">
+          <!-- Live status indicator -->
+          <span id="ws-status" class="flex items-center gap-1 text-xs text-muted-foreground">
+            <span class="size-2 rounded-full bg-muted-foreground/50"></span>
+            Disconnected
+          </span>
+          <!-- TODO: Pause/resume execution for the selected node -->
+          <button
+            id="pause-node-btn"
+            class="inline-flex h-7 items-center gap-1 rounded-md border border-border px-2 text-xs font-medium transition-colors hover:bg-muted"
+          >
+            ⏸ Pause
+          </button>
+        </div>
+      </div>
+
+      <!--
+        Collaboration stream — agent messages, status updates, code snippets.
+        WebSocket connects to /api/ws/collab/[nodeType]/[nodeId]?projectId=[id]
+      -->
+      <div
+        id="collab-stream"
+        class="flex-1 overflow-y-auto p-4 font-mono text-xs"
+      >
+        <p class="text-muted-foreground">Waiting for WebSocket connection…</p>
+      </div>
+
+      <!-- User steering input -->
+      <div class="border-t border-border/60 p-3">
+        <div class="flex gap-2">
+          <input
+            id="steer-input"
+            type="text"
+            placeholder="Steer the agents — your message interrupts the current task…"
+            class="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          />
+          <button
+            id="steer-send-btn"
+            class="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</AppLayout>

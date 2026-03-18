@@ -1,0 +1,65 @@
+---
+/**
+ * /application-viewport/[id]/projects — Projects list for an application
+ *
+ * Lists all projects belonging to this application.
+ * Includes a "Create Project" button that opens an intake modal.
+ * Each project card links to /project-viewport/[projectId]/insights
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { applicationViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = applicationViewportNav(id!);
+---
+
+<AppLayout
+  title="Projects — MindHive"
+  description="Projects linked to this application."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <a href={`/application-viewport/${id}/landing`} class="hover:text-foreground">{id}</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Projects</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Projects</h1>
+        <p class="text-sm text-muted-foreground">Projects linked to this application.</p>
+      </div>
+      <!-- TODO: Wire to CreateProjectModal -->
+      <button
+        id="create-project-btn"
+        class="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        + New Project
+      </button>
+    </div>
+
+    <!-- Projects grid -->
+    <!--
+      TODO: Fetch projects from API (filter by applicationId) and render cards.
+      Each card links to /project-viewport/[projectId]/insights
+    -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="rounded-xl border border-dashed border-border/60 bg-card p-6 shadow-xs">
+        <p class="text-sm text-muted-foreground">No projects yet. Create one to get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!--
+    TODO: CreateProjectModal — intake fields:
+    - Project name
+    - Description
+    - GitHub branch
+    - Jules SDK config
+  -->
+</AppLayout>

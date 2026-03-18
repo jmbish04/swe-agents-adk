@@ -1,0 +1,47 @@
+---
+/**
+ * /project-viewport/[id]/parking-lot — Deferred tasks
+ *
+ * Holds tasks that are intentionally deferred to a later phase.
+ * Users and agents can move items in/out of the parking lot.
+ */
+import AppLayout from "@/layouts/AppLayout.astro";
+import { projectViewportNav } from "@/components/SidebarNav";
+
+const { id } = Astro.params;
+const navSections = projectViewportNav(id!);
+---
+
+<AppLayout
+  title="Parking Lot — MindHive"
+  description="Deferred tasks for this project."
+  navSections={navSections}
+>
+  <span slot="topbar">
+    <nav class="flex items-center gap-1 text-sm text-muted-foreground">
+      <a href="/applications" class="hover:text-foreground">Applications</a>
+      <span>/</span>
+      <span class="text-foreground font-medium">Project {id}</span>
+      <span>/</span>
+      <span class="text-foreground font-medium">Parking Lot</span>
+    </nav>
+  </span>
+
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight">Parking Lot</h1>
+      <p class="text-sm text-muted-foreground">
+        Tasks deferred intentionally — revisit in a later phase.
+      </p>
+    </div>
+
+    <!--
+      TODO: Render deferred task list from API.
+      Each task card: title, original epic/story, deferred reason, deferred-by (agent or user),
+      and actions: "Move to Backlog" | "Discard"
+    -->
+    <div class="rounded-xl border border-dashed border-border/60 bg-card p-6 shadow-xs">
+      <p class="text-sm text-muted-foreground">Parking lot is empty.</p>
+    </div>
+  </div>
+</AppLayout>

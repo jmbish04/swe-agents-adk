@@ -1,0 +1,338 @@
+{
+  "project_name": "MindHive",
+  "generated_date": "2026-03-17T22:48:02Z",
+  "total_epics": 4,
+  "epics": [
+    {
+      "epic_number": 1,
+      "title": "Configuration & Data Layer Setup",
+      "description": "Finalize Wrangler configurations and D1 schemas using Drizzle.",
+      "successCriteria": [
+        "wrangler.jsonc includes 8 DO bindings",
+        "worker-configuration.d.ts correctly auto-mapped without manual edits",
+        "Drizzle schema matches project_tasks.ts perfectly",
+        "Migrations generated without errors"
+      ],
+      "implementationPlan": {
+        "title": "Core Configurations & Database Schema",
+        "description": "Establish the foundational D1 and Cloudflare Agent schema required for the workspace.",
+        "architecture": {
+          "explanation": "Cloudflare Worker serving as entrypoint with D1 attached via Drizzle ORM.",
+          "mermaid_diagram": "graph TD;\n Worker-->DO;\n Worker-->D1;"
+        },
+        "proposed_changes": [
+          {
+            "category": "Configuration & Backend",
+            "files": [
+              {
+                "action": "MODIFY",
+                "file_path": "src/backend/wrangler.jsonc",
+                "instructions": ["Ensure migrations array accurately captures all 8 DOs."]
+              },
+              {
+                "action": "MODIFY",
+                "file_path": "src/backend/db/schemas/project_tasks.ts",
+                "instructions": ["Validate existing implementation of epics, stories, and steps schemas."]
+              }
+            ]
+          }
+        ],
+        "verification_plan": {
+          "automated_tests": [
+            {
+              "command": "cd src/backend && pnpm run types",
+              "expected_outcome": "Exit code 0, Types map perfectly to Env."
+            },
+            {
+              "command": "cd src/backend && pnpm run db:generate",
+              "expected_outcome": "Migration SQL files generated."
+            }
+          ],
+          "manual_verification": ["Verify generated sql in src/backend/drizzle."]
+        }
+      },
+      "stories": [
+        {
+          "story_number": 1,
+          "status": "not_started",
+          "agent_assigned": "Core_Scaffold_Agent",
+          "title": "Validate Configs and Build Types",
+          "description": "Ensure Wrangler mappings correspond perfectly to standard DO usage.",
+          "dependencies": [],
+          "cloudflareDocsQueries": [
+            "What is the correct format for wrangler.jsonc Durable Objects migrations?"
+          ],
+          "requirements": ["Always use pnpm.", "Navigate to src/backend when running backend commands."],
+          "agentRules": [
+            "NEVER redefine, extend, or manually type the Env interface.",
+            "NEVER import Env from any file."
+          ],
+          "successCriteria": ["npx wrangler types completes seamlessly."],
+          "steps": [
+            {
+              "step_number": 1.1,
+              "title": "Run Types Generation",
+              "status": "not_started",
+              "technicalRequirements": ["Execute the pnpm run types command in the backend module."],
+              "successCriteria": ["worker-configuration.d.ts updated effectively."],
+              "validationCommand": "cd src/backend && pnpm run types"
+            }
+          ]
+        },
+        {
+          "story_number": 2,
+          "status": "not_started",
+          "agent_assigned": "Data_Agent",
+          "title": "Database Schema Generation",
+          "description": "Execute database generation and verify standard outputs.",
+          "dependencies": ["Story 1"],
+          "cloudflareDocsQueries": [
+            "Proper usage of Drizzle ORM on Cloudflare D1 with drizzle-zod inference."
+          ],
+          "requirements": ["Navigate to src/backend when generating." ],
+          "agentRules": [
+            "Use Drizzle ORM.",
+            "No Raw SQL. Do not write manual .sql files."
+          ],
+          "successCriteria": ["Migrations file exists in src/backend/drizzle"],
+          "steps": [
+            {
+              "step_number": 2.1,
+              "title": "Generate Drizzle Sql",
+              "status": "not_started",
+              "technicalRequirements": ["Generate drizzle migrations using configured schema files."],
+              "successCriteria": ["Exit code 0 from drizzle-kit."],
+              "validationCommand": "cd src/backend && pnpm run db:generate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "epic_number": 2,
+      "title": "Agent Swarm Infrastructure",
+      "description": "Create the individual Agent DO files as declared in wrangler.jsonc.",
+      "successCriteria": [
+        "All 8 DO classes compile correctly.",
+        "PM Agent extends AIChatAgent.",
+        "MCP Server extends McpAgent."
+      ],
+      "implementationPlan": {
+        "title": "DO Implementations",
+        "description": "Establish the exact stubs and DO logic for each agent.",
+        "architecture": {
+          "explanation": "Stateful agent DOs running inside the Cloudflare Workers architecture.",
+          "mermaid_diagram": "graph TD;\n Frontend<-->PM_Agent;\n PM_Agent<-->UX_Agent;"
+        },
+        "proposed_changes": [
+          {
+            "category": "Backend: Agents",
+            "files": [
+              {
+                "action": "NEW",
+                "file_path": "src/backend/ai/agents/ProductManagerAgent.ts",
+                "instructions": ["Export ProductManagerAgent class extending AIChatAgent<Env>."]
+              },
+              {
+                "action": "NEW",
+                "file_path": "src/backend/ai/agents/UxTeamAgent.ts",
+                "instructions": ["Export UxTeamAgent expanding Agent<Env>."]
+              },
+              {
+                "action": "NEW",
+                "file_path": "src/backend/index.ts",
+                "instructions": ["Import and re-export all 8 DOs so Worker recognizes them."]
+              }
+            ]
+          }
+        ],
+        "verification_plan": {
+          "automated_tests": [
+            {
+              "command": "cd src/backend && pnpm run build",
+              "expected_outcome": "Build succeeds without DO signature errors."
+            }
+          ],
+          "manual_verification": []
+        }
+      },
+      "stories": [
+        {
+          "story_number": 3,
+          "status": "not_started",
+          "agent_assigned": "AI_Agent",
+          "title": "Build PM Agent",
+          "description": "Create the main orchestrator agent.",
+          "dependencies": ["Epic 1"],
+          "cloudflareDocsQueries": [
+            "How does AIChatAgent trigger functions via tools using Agents SDK?"
+          ],
+          "requirements": ["Do not import Env.", "Use @cloudflare/agents library."],
+          "agentRules": [
+            "NEVER use Vercel AI SDK (`ai`, `ai/react`, `useChat`).",
+            "MindHive relies entirely on `@cloudflare/ai-chat` and `agents` SDK."
+          ],
+          "successCriteria": ["ProductManagerAgent compiles"],
+          "steps": [
+            {
+              "step_number": 3.1,
+              "title": "Write ProductManagerAgent",
+              "status": "not_started",
+              "technicalRequirements": ["Class must extend AIChatAgent<Env>."],
+              "successCriteria": ["Basic onChatMessage hook created."],
+              "validationCommand": "cd src/backend && pnpm run build"
+            }
+          ]
+        },
+        {
+          "story_number": 4,
+          "status": "not_started",
+          "agent_assigned": "AI_Agent",
+          "title": "Write Index Re-exports",
+          "description": "Ensure the Worker correctly mounts the DO bindings.",
+          "dependencies": ["Story 3"],
+          "cloudflareDocsQueries": [],
+          "requirements": ["index.ts must export all 8 agents."],
+          "agentRules": [
+            "EVERY module import MUST use TypeScript path aliases defined in tsconfig.json."
+          ],
+          "successCriteria": ["All DO classes exported in main index.ts."],
+          "steps": [
+            {
+              "step_number": 4.1,
+              "title": "Configure Worker Entrypoint",
+              "status": "not_started",
+              "technicalRequirements": ["Export ProductManagerAgent, UxTeamAgent, etc from index.ts."],
+              "successCriteria": ["No missing export warnings from TypeScript."],
+              "validationCommand": "cd src/backend && pnpm run build"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "epic_number": 3,
+      "title": "REST and Router Integration",
+      "description": "Integrate Hono router for the standard application endpoints.",
+      "successCriteria": [
+        "Hono handles /api/applications.",
+        "WebSocket upgrades are configured properly."
+      ],
+      "implementationPlan": {
+        "title": "Hono OpenAPI Router",
+        "description": "Add REST routing via Hono and zod schemas.",
+        "architecture": {
+          "explanation": "Cloudflare Worker hitting D1 via Drizzle.",
+          "mermaid_diagram": "graph TD;\n Client-->Hono;\n Hono-->D1;"
+        },
+        "proposed_changes": [
+          {
+            "category": "Backend: API",
+            "files": [
+              {
+                "action": "NEW",
+                "file_path": "src/backend/api/rest/applications.ts",
+                "instructions": ["Establish application CRUD routes with Zod Validation."]
+              }
+            ]
+          }
+        ],
+        "verification_plan": {
+          "automated_tests": [
+            { "command": "cd src/backend && pnpm run build", "expected_outcome": "Build succeeds." }
+          ],
+          "manual_verification": []
+        }
+      },
+      "stories": [
+        {
+          "story_number": 5,
+          "status": "not_started",
+          "agent_assigned": "Backend_Agent",
+          "title": "Implement Hono API",
+          "description": "Connect Drizzle queries to Hono routes.",
+          "dependencies": ["Epic 1"],
+          "cloudflareDocsQueries": [],
+          "requirements": ["Use createRoute and OpenAPIHono from @hono/zod-openapi."],
+          "agentRules": [
+            "Use strict TypeScript path aliases (e.g. `@api/rest/...`)"
+          ],
+          "successCriteria": ["Route code logic matches the PRD spec."],
+          "steps": [
+            {
+              "step_number": 5.1,
+              "title": "Create Applications Route",
+              "status": "not_started",
+              "technicalRequirements": ["Accepts insertApplicationSchema request body."],
+              "successCriteria": ["Route inserts record into D1 via Drizzle."],
+              "validationCommand": "cd src/backend && pnpm run build"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "epic_number": 4,
+      "title": "Frontend Implementation",
+      "description": "Establish the Astro and React framework with dark theme Shadcn components.",
+      "successCriteria": [
+        "Astro dev server runs.",
+        "Shadcn components compile without errors.",
+        "Dark mode class is hardcoded into layout."
+      ],
+      "implementationPlan": {
+        "title": "Astro UI Foundations",
+        "description": "Implement standard Astro layouts with React islands.",
+        "architecture": {
+          "explanation": "Astro generating static/SSR routes pointing to backend.",
+          "mermaid_diagram": "graph LR;\n Astro-->Assets;"
+        },
+        "proposed_changes": [
+          {
+            "category": "Frontend: UI",
+            "files": [
+              {
+                "action": "NEW",
+                "file_path": "src/frontend/src/layouts/BaseLayout.astro",
+                "instructions": ["Apply <html class=\"dark\"> explicitly."]
+              }
+            ]
+          }
+        ],
+        "verification_plan": {
+          "automated_tests": [
+            { "command": "cd src/frontend && pnpm build", "expected_outcome": "Frontend builds." }
+          ],
+          "manual_verification": ["Open in preview and observe dark theme."]
+        }
+      },
+      "stories": [
+        {
+          "story_number": 6,
+          "status": "not_started",
+          "agent_assigned": "Frontend_Agent",
+          "title": "Construct Dark Theme Layout",
+          "description": "Build the foundational layout file in Astro.",
+          "dependencies": [],
+          "cloudflareDocsQueries": [],
+          "requirements": ["Path aliases for frontend usually are `@/...` depending on tsconfig.json"],
+          "agentRules": [
+            "DEFAULT DARK THEME SHADCN — no exceptions.",
+            "<html class=\"dark\"> is mandatory in Astro layouts."
+          ],
+          "successCriteria": ["Layout encapsulates all content in dark mode wrapper."],
+          "steps": [
+            {
+              "step_number": 6.1,
+              "title": "Create Base Layout",
+              "status": "not_started",
+              "technicalRequirements": ["Define <html class=\"dark\">."],
+              "successCriteria": ["Layout is used across all Astro pages."],
+              "validationCommand": "cd src/frontend && pnpm run build"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
