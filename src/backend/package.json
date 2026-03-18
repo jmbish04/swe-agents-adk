@@ -17,7 +17,6 @@
     "wrangler": "^4.75.0"
   },
   "dependencies": {
-    "@cloudflare/agents": "^0.0.16",
     "@hono/swagger-ui": "^0.6.1",
     "@hono/zod-openapi": "^1.2.2",
     "agents": "^0.7.6",
