@@ -10,5 +10,19 @@
     "migrate:remote": "pnpm run db:generate && wrangler d1 migrations apply DB --remote --config wrangler.jsonc",
     "deploy": "pnpm run migrate:remote && wrangler deploy --config wrangler.jsonc",
     "deploy:tail": "rm -f wrangler.log && pnpm run deploy && wrangler tail --format pretty | tee wrangler.log"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260317.1",
+    "vitest": "^4.1.0",
+    "wrangler": "^4.75.0"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.6.1",
+    "@hono/zod-openapi": "^1.2.2",
+    "agents": "^0.7.6",
+    "drizzle-orm": "^0.45.1",
+    "drizzle-zod": "^0.8.3",
+    "hono": "^4.12.8",
+    "zod": "^4.3.6"
   }
 }

@@ -5,9 +5,6 @@
     "moduleResolution": "bundler",
     "strict": true,
     "skipLibCheck": true,
-    // lib MUST be [ESNext] only — omitting "dom" prevents TypeScript's built-in DOM
-    // types from conflicting with the Cloudflare Workers runtime types in worker-configuration.d.ts.
-    // See: https://developers.cloudflare.com/workers/languages/typescript/
     "lib": ["ESNext"],
     "types": [
       "./worker-configuration.d.ts",
@@ -16,7 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@agents/*": ["./agents/*"],
+      "@agents/*": ["./ai/agents/*"],
       "@ai/*": ["./ai/*"],
       "@api/*": ["./api/*"],
       "@db/*": ["./db/*"],

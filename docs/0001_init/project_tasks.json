@@ -54,7 +54,7 @@
       "stories": [
         {
           "story_number": 1,
-          "status": "not_started",
+          "status": "complete",
           "agent_assigned": "Core_Scaffold_Agent",
           "title": "Validate Configs and Build Types",
           "description": "Ensure Wrangler mappings correspond perfectly to standard DO usage.",
@@ -72,7 +72,7 @@
             {
               "step_number": 1.1,
               "title": "Run Types Generation",
-              "status": "not_started",
+              "status": "complete",
               "technicalRequirements": ["Execute the pnpm run types command in the backend module."],
               "successCriteria": ["worker-configuration.d.ts updated effectively."],
               "validationCommand": "cd src/backend && pnpm run types"
@@ -81,7 +81,7 @@
         },
         {
           "story_number": 2,
-          "status": "not_started",
+          "status": "complete",
           "agent_assigned": "Data_Agent",
           "title": "Database Schema Generation",
           "description": "Execute database generation and verify standard outputs.",
@@ -99,7 +99,7 @@
             {
               "step_number": 2.1,
               "title": "Generate Drizzle Sql",
-              "status": "not_started",
+              "status": "complete",
               "technicalRequirements": ["Generate drizzle migrations using configured schema files."],
               "successCriteria": ["Exit code 0 from drizzle-kit."],
               "validationCommand": "cd src/backend && pnpm run db:generate"
@@ -159,7 +159,7 @@
       "stories": [
         {
           "story_number": 3,
-          "status": "not_started",
+          "status": "complete",
           "agent_assigned": "AI_Agent",
           "title": "Build PM Agent",
           "description": "Create the main orchestrator agent.",
@@ -177,7 +177,7 @@
             {
               "step_number": 3.1,
               "title": "Write ProductManagerAgent",
-              "status": "not_started",
+              "status": "complete",
               "technicalRequirements": ["Class must extend AIChatAgent<Env>."],
               "successCriteria": ["Basic onChatMessage hook created."],
               "validationCommand": "cd src/backend && pnpm run build"
@@ -186,7 +186,7 @@
         },
         {
           "story_number": 4,
-          "status": "not_started",
+          "status": "complete",
           "agent_assigned": "AI_Agent",
           "title": "Write Index Re-exports",
           "description": "Ensure the Worker correctly mounts the DO bindings.",
@@ -201,7 +201,7 @@
             {
               "step_number": 4.1,
               "title": "Configure Worker Entrypoint",
-              "status": "not_started",
+              "status": "complete",
               "technicalRequirements": ["Export ProductManagerAgent, UxTeamAgent, etc from index.ts."],
               "successCriteria": ["No missing export warnings from TypeScript."],
               "validationCommand": "cd src/backend && pnpm run build"
